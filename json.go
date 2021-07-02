@@ -17,7 +17,7 @@ func DecodeJSONBody(w http.ResponseWriter, r *http.Request, dst interface{}) err
 		value, _ := header.ParseValueAndParams(r.Header, "Content-Type")
 		if value != "application/json" {
 			msg := "Content-Type header is not application/json"
-			return httperr.MalformedRequest(msg)
+			return httperr.UnsupportedMediaType(msg)
 		}
 	}
 

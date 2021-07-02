@@ -2,12 +2,17 @@ package errors
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
 type httpError struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
+}
+
+func (he httpError) Error() string {
+	return fmt.Sprintf("%d - %s", he.Status, he.Message)
 }
 
 func WriteError(w http.ResponseWriter, err httpError) error {
@@ -30,4 +35,12 @@ func BadRequest(msg string) httpError {
 
 func Unauthorized() httpError {
 	return httpError{http.StatusUnauthorized, "Unauthorized"}
+}
+
+func UnsupportedMediaType(msg string) httpError {
+	return httpError{http.StatusUnsupportedMediaType, "Malformed request - " + msg}
+}
+
+func RequestEntityTooLarge(msg string) httpError {
+	return httpError{http.StatusRequestEntityTooLarge, "Request entity too large - " + msg}
 }

@@ -15,6 +15,11 @@ func (he httpError) Error() string {
 	return fmt.Sprintf("%d - %s", he.Status, he.Message)
 }
 
+func ToHTTPErr(err error) (httpError, bool) {
+	e, ok := err.(httpError)
+	return e, ok
+}
+
 func WriteError(w http.ResponseWriter, err httpError) error {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(err.Status)
